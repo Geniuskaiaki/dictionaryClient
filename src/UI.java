@@ -39,7 +39,7 @@ public class UI extends JFrame {
 		p3.add(new Label("Welcome to MyDictionary"));
 		w.add(p3,BorderLayout.NORTH);
 		w.setTitle("Dictionary");
-		w.setSize(450, 350);
+		w.setSize(450, 351);
 		w.setLocationRelativeTo(null);
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//w.setBackground(new Color(99,00,180));
