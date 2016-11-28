@@ -55,9 +55,24 @@ public class RegisterUI extends JFrame{
 	
 	Register.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			JOptionPane.showMessageDialog(RegisterUI.this, "注册成功!");  
+			String username = user.getText();
+			String pw1 = password1.getText();
+			String pw2 = password2.getText();
+			//if(用户名已存在)
+				//JOptionPane.showMessageDialog(RegisterUI.this, "用户名已存在"); 
+			if(pw1.equals(pw2)!=true)
+				JOptionPane.showMessageDialog(RegisterUI.this, "两次密码输入不一致");
+			else{
+			JOptionPane.showMessageDialog(RegisterUI.this, "注册成功");  
 			owner.setVisible(true);
 			RegisterUI.this.dispose();
+			}
+			user.setText("");
+			password1.setText("");
+			password2.setText("");
+			user.repaint();
+			password1.repaint();
+			password2.repaint();
            // System.exit(0); 
 		}
 	}

@@ -48,7 +48,39 @@ public class UI extends JFrame {
 		
 		LogIn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				String username = user.getText();
+				String userpw = password.getText();
+				//System.out.println(userpw);
+				//if(username == null)
+				//{
+					//JOptionPane.showMessageDialog(UI.this, "用户名不能为空!");
+				//}
+				//else if(userpw == null)
+					//JOptionPane.showMessageDialog(UI.this, "密码不能为空!");
+				//if(用户名不存在){
+					//JOptionPane.showMessageDialog(UI.this, "用户名不存在!");
+					//user.setText("");
+					//password.setText("");
+					//user.repaint();
+					//password.repaint();
+				//}
+				//else if(密码错误)
+					//JOptionPane.showMessageDialog(UI.this, "密码错误!");
+				//else{
 				JOptionPane.showMessageDialog(UI.this, "登陆成功!");  
+				w.setVisible(false);
+				//RegisterUI x= new RegisterUI(UI.this);
+				try {
+					new SearchUI(w).setVisible(true);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				user.setText("");
+				password.setText("");
+				user.repaint();
+				password.repaint();
+			//}
                // System.exit(0); 
 			}
 		}
@@ -56,8 +88,8 @@ public class UI extends JFrame {
 		
 		Register.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				if(e.getSource()==Register)
-				{
+				//if(e.getSource()==Register)
+				//{
 				w.setVisible(false);
 				//RegisterUI x= new RegisterUI(UI.this);
 				try {
@@ -66,7 +98,7 @@ public class UI extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				}
+				//}
 				//JOptionPane.showMessageDialog(UI.this, "登陆成功!");  
                // System.exit(0); 
 			}
@@ -82,7 +114,8 @@ public class UI extends JFrame {
 		//A.FindSimilar(s);
 		//System.out.println(s);
 		//A.PrintResult();
-		UI frame = new UI();
+		//UI frame = new UI();
+		new UI();
 		/*frame.setTitle("Dictionary");
 		frame.setSize(450, 350);
 		frame.setLocationRelativeTo(null);
