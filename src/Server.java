@@ -6,12 +6,15 @@ import javax.swing.*;
 
 public class Server extends JFrame{
 	private JTextArea jta = new JTextArea();
+	//private String user;
+	private String user,word,trans1,trans2,trans3;
 	
 	public static void main(String[] args){
 		new Server();
 	}
 	
 	public Server(){
+		user=word=trans1=trans2=trans3="";
 		setLayout(new BorderLayout());
 		add(new JScrollPane(jta),BorderLayout.CENTER);
 		setTitle("Server");
@@ -58,11 +61,34 @@ public class Server extends JFrame{
 				DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
 				DataOutputStream ouputToClient = new DataOutputStream(socket.getOutputStream());
 				while(true){
-					String word = inputFromClient.readUTF();
-					
+					String type = inputFromClient.readUTF();
+					if(type.equals("card"))
+					{
+						word=inputFromClient.readUTF();
+						user=inputFromClient.readUTF();
+						trans1=inputFromClient.readUTF();
+						trans2=inputFromClient.readUTF();
+						trans3=inputFromClient.readUTF();
+					}
+					if(type.equals("HaveMessage"))
+					{
+						String user2=inputFromClient.readUTF();
+						if(user2.equals(user))
+						{
+							ouputToClient.writeUTF("yes");
+							ouputToClient.writeUTF(word);
+							//ouputToClient.writeUTF(user);
+							ouputToClient.writeUTF(trans1);
+							ouputToClient.writeUTF(trans2);
+							ouputToClient.writeUTF(trans3);
+							user="";
+						}
+						else
+							ouputToClient.writeUTF("no");
+					}
 					//对接收到的单词进行处理
 					//String result;
-					ouputToClient.writeUTF(word);
+					//ouputToClient.writeUTF(word);
 					jta.append("success!"+'\n');
 				}
 			}
