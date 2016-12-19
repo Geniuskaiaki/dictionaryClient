@@ -32,13 +32,14 @@ public class SearchUI extends JFrame{
 	int sendornot=0;
 	
 	String SearchWord;
-	int likeBD=0;//百度的点赞状态
+	int likeBD=0;//爱词的点赞状态
 	int likeYD=0;//有道的点赞状态
-	int likeBY=0;//必应的点赞状态
+	int likeBY=0;//海词的点赞状态
 	JButton quit = new JButton("退出");
 	JLabel title = new JLabel("MyDictory");
 	JTextField input = new JTextField(18);
-	JButton search = new JButton("Search");
+	JButton search = new JButton();
+	//JButton search = new JButton("Search");
 	//JButton BD = new JButton();
 	JRadioButton BD = new JRadioButton();
 	JRadioButton YD = new JRadioButton();
@@ -57,6 +58,7 @@ public class SearchUI extends JFrame{
 	
 	public  SearchUI(JFrame owner,String user,DataOutputStream toServer,DataInputStream fromServer,Socket socket) throws IOException{
 		//path = "//Users//wfsm//Desktop//"+user;
+		search.setIcon(new ImageIcon("搜索.png"));
 		this.socket=socket;
 		this.toServer=toServer;
 		this.fromServer=fromServer;
@@ -74,7 +76,11 @@ public class SearchUI extends JFrame{
 		jsp.setPreferredSize(new Dimension(100,30));
 		JPanel p1 = new JPanel();
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT,30,10));
-		p1.add(new JLabel("当前用户:"+user));
+		JLabel tcu= new JLabel();
+		tcu.setIcon(new ImageIcon("已登陆.png"));
+		p1.add(tcu);
+		p1.add(new JLabel(user));
+		//p1.add(new JLabel("当前用户:"+user));
 		p1.add(new JLabel("input"));
 		p1.add(input);
 		p1.add(search);
@@ -83,7 +89,7 @@ public class SearchUI extends JFrame{
 		ImageIcon icon = new ImageIcon("心1.png");
 		BD.setIcon(icon);
 		p2.add(BD);
-		p2.add(new JLabel("百度"));
+		p2.add(new JLabel("爱词"));
 		BDText.setLineWrap(true);//自动换行
 		BDText.setWrapStyleWord(true);//根据单词换行，而不是根据字符换行
 		BDText.setEditable(false);//不可编辑
@@ -105,7 +111,7 @@ public class SearchUI extends JFrame{
 		JPanel p4 = new JPanel();
 		BY.setIcon(new ImageIcon("心1.png"));
 		p4.add(BY);
-		p4.add(new JLabel("必应"));
+		p4.add(new JLabel("海词"));
 		BYText.setLineWrap(true);
 		BYText.setWrapStyleWord(true);
 		BYText.setEditable(false);
@@ -143,7 +149,7 @@ public class SearchUI extends JFrame{
 		add(p7,BorderLayout.SOUTH);
 		
 		this.setTitle("Dictionary");
-		this.setSize(600, 500);
+		this.setSize(600, 600);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
@@ -169,7 +175,10 @@ public class SearchUI extends JFrame{
 					String[] CU=currentUsers.split(" ");
 					//otherUser.removeAllItems();
 					for(int i=0;i<CU.length;i++)
-						otherUser.addItem(CU[i]);
+					{
+						if(!CU[i].equals(user))
+							otherUser.addItem(CU[i]);
+					}
 					}
 					//////////////////////////////
 					String have=fromServer.readUTF();
@@ -535,44 +544,44 @@ public class SearchUI extends JFrame{
 					//p5.remove(p2);
 					if(order.equals("123"))
 					{
-						type1="百度："+BDText.getText();
+						type1="爱词："+BDText.getText();
 						type2="有道："+YDText.getText();
-						type3="必应："+BYText.getText();
+						type3="海词："+BYText.getText();
 					}
 					else if(order.equals("132")){
 						p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						p5.add(p4);p5.add(p3);p5.add(p9);
-						type1="百度："+BDText.getText();
+						type1="爱词："+BDText.getText();
 						type3="有道："+YDText.getText();
-						type2="必应："+BYText.getText();
+						type2="海词："+BYText.getText();
 					}
 					else if(order.equals("213")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						p5.add(p3);p5.add(p2);p5.add(p4);p5.add(p9);
-						type2="百度："+BDText.getText();
+						type2="爱词："+BDText.getText();
 						type1="有道："+YDText.getText();
-						type3="必应："+BYText.getText();
+						type3="海词："+BYText.getText();
 					}
 					else if(order.equals("231")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						/*p5.add(p3);p5.add(p4);p5.add(p2);*/p5.add(p4);p5.add(p2);p5.add(p3);p5.add(p9);
-						type2="百度："+BDText.getText();
+						type2="爱词："+BDText.getText();
 						type3="有道："+YDText.getText();
-						type1="必应："+BYText.getText();
+						type1="海词："+BYText.getText();
 					}
 					else if(order.equals("312")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						/*p5.add(p4);p5.add(p2);p5.add(p3);*/p5.add(p3);p5.add(p4);p5.add(p2);p5.add(p9);
-						type3="百度："+BDText.getText();
+						type3="爱词："+BDText.getText();
 						type1="有道："+YDText.getText();
-						type2="必应："+BYText.getText();
+						type2="海词："+BYText.getText();
 					}
 					else{
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						p5.add(p4);p5.add(p3);p5.add(p2);p5.add(p9);
-						type3="百度："+BDText.getText();
+						type3="爱词："+BDText.getText();
 						type2="有道："+YDText.getText();
-						type1="必应："+BYText.getText();
+						type1="海词："+BYText.getText();
 					}
 					p5.setVisible(false);
 					p5.setVisible(true);
@@ -634,44 +643,44 @@ public class SearchUI extends JFrame{
 					BYText.setText(result3);
 					BYText.repaint();
 					if(order.equals("123")){
-						type1="百度："+BDText.getText();
+						type1="爱词："+BDText.getText();
 						type2="有道："+YDText.getText();
-						type3="必应："+BYText.getText();
+						type3="海词："+BYText.getText();
 					}
 					else if(order.equals("132")){
 						p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						p5.add(p4);p5.add(p3);p5.add(p9);
-						type1="百度："+BDText.getText();
+						type1="爱词："+BDText.getText();
 						type3="有道："+YDText.getText();
-						type2="必应："+BYText.getText();
+						type2="海词："+BYText.getText();
 					}
 					else if(order.equals("213")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						p5.add(p3);p5.add(p2);p5.add(p4);p5.add(p9);
-						type2="百度："+BDText.getText();
+						type2="爱词："+BDText.getText();
 						type1="有道："+YDText.getText();
-						type3="必应："+BYText.getText();
+						type3="海词："+BYText.getText();
 					}
 					else if(order.equals("231")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						/*p5.add(p3);p5.add(p4);p5.add(p2);*/p5.add(p4);p5.add(p2);p5.add(p3);p5.add(p9);
-						type2="百度："+BDText.getText();
+						type2="爱词："+BDText.getText();
 						type3="有道："+YDText.getText();
-						type1="必应："+BYText.getText();
+						type1="海词："+BYText.getText();
 					}
 					else if(order.equals("312")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						/*p5.add(p4);p5.add(p2);p5.add(p3);*/p5.add(p3);p5.add(p4);p5.add(p2);p5.add(p9);
-						type3="百度："+BDText.getText();
+						type3="爱词："+BDText.getText();
 						type1="有道："+YDText.getText();
-						type2="必应："+BYText.getText();
+						type2="海词："+BYText.getText();
 					}
 					else{
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
 						p5.add(p4);p5.add(p3);p5.add(p2);p5.add(p9);
-						type3="百度："+BDText.getText();
+						type3="爱词："+BDText.getText();
 						type2="有道："+YDText.getText();
-						type1="必应："+BYText.getText();
+						type1="海词："+BYText.getText();
 					}
 					p5.setVisible(false);
 					p5.setVisible(true);

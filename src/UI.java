@@ -26,11 +26,14 @@ public class UI extends JFrame {
 	//getContentPane().add(w);
 	JTextField user = new JTextField(15);
 	JPasswordField password = new JPasswordField(15);
-	JButton LogIn = new JButton("登陆:");
-	JButton Register = new JButton("注册:");
+	//JButton LogIn = new JButton("登陆:");
+	JButton LogIn = new JButton();
+	JButton Register = new JButton();
+	//JButton Register = new JButton("注册:");
 	
 	public UI() throws IOException{
-
+		LogIn.setIcon(new ImageIcon("登陆.png"));
+		Register.setIcon(new ImageIcon("注册.png"));
 		//getContentFrame().add(w);
 		password.setEchoChar('*');
 		JPanel p1 = new JPanel();
@@ -52,7 +55,7 @@ public class UI extends JFrame {
 		p3.add(new Label("Welcome to MyDictionary"));
 		w.add(p3,BorderLayout.NORTH);
 		w.setTitle("Dictionary");
-		w.setSize(450, 350);
+		w.setSize(350, 250);
 		w.setLocationRelativeTo(null);
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//JPanel panel = new JPanel();
@@ -170,6 +173,12 @@ public class UI extends JFrame {
 		//System.out.println(s);
 		//A.PrintResult();
 		//UI frame = new UI();
+		try {
+			org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		new UI();
 		/*frame.setTitle("Dictionary");
 		frame.setSize(450, 350);

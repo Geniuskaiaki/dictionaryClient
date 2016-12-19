@@ -36,7 +36,7 @@ public class ViewImage extends JFrame{
 		add(jp,BorderLayout.NORTH);
 		add(jp2,BorderLayout.SOUTH);
 		this.setTitle("view word cards");
-		this.setSize(500, 500);
+		this.setSize(500, 525);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);

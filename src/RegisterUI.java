@@ -53,7 +53,7 @@ public class RegisterUI extends JFrame{
 		p6.add(Register);
 		add(p6,BorderLayout.SOUTH);
 		this.setTitle("Dictionary");
-		this.setSize(450, 350);
+		this.setSize(350, 280);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
