@@ -28,6 +28,8 @@ public class SearchUI extends JFrame{
 	FileOutputStream fos=null;
 	Associate Ass;
 	String path;//单词卡保存的路径
+	Socket socket;
+	int sendornot=0;
 	
 	String SearchWord;
 	int likeBD=0;//百度的点赞状态
@@ -53,8 +55,9 @@ public class SearchUI extends JFrame{
 	
 	//JTextArea BDText2 = new JTextArea(2,20);
 	
-	public  SearchUI(JFrame owner,String user,DataOutputStream toServer,DataInputStream fromServer) throws IOException{
+	public  SearchUI(JFrame owner,String user,DataOutputStream toServer,DataInputStream fromServer,Socket socket) throws IOException{
 		//path = "//Users//wfsm//Desktop//"+user;
+		this.socket=socket;
 		this.toServer=toServer;
 		this.fromServer=fromServer;
 		SearchWord="";
@@ -111,9 +114,9 @@ public class SearchUI extends JFrame{
 		p4.add(by);
 		//p4.add(BYText);
 		otherUser.setEditable(true);
-		otherUser.addItem("141220085");
-        otherUser.addItem("141220086");
-        otherUser.addItem("141220087");
+		//otherUser.addItem("141220085");
+        //otherUser.addItem("141220086");
+        //otherUser.addItem("141220087");
         JPanel p9 = new JPanel();
         p9.setLayout(new FlowLayout(FlowLayout.LEFT,25,10));
         p9.add(otherUser);
@@ -146,7 +149,7 @@ public class SearchUI extends JFrame{
 		this.setVisible(true);
 		
 		//每过两秒询问服务器是否有消息
-		/*int delay=2000;
+		int delay=5000;
 		ActionListener taskEvent=new ActionListener(){
 			public void actionPerformed(ActionEvent aen){
 				//count++;
@@ -154,44 +157,65 @@ public class SearchUI extends JFrame{
 					toServer.writeUTF("HaveMessage");
 					toServer.writeUTF(user);
 					toServer.flush();
-					String have=fromServer.readUTF();*/
+					//String have=fromServer.readUTF();
 					///////////////////////////////
-					/*String currentUsers=fromServer.readUTF();
-					String[] CU=currentUsers.split(" ");
+					String currentUsers=fromServer.readUTF();
 					otherUser.removeAllItems();
+					if(currentUsers.equals("null")){
+						;
+					}
+					else{
+					String[] CU=currentUsers.split(" ");
+					//otherUser.removeAllItems();
 					for(int i=0;i<CU.length;i++)
-						otherUser.	addItem(CU[i]);*/
+						otherUser.addItem(CU[i]);
+					}
 					//////////////////////////////
-					/*if(have.equals("yes")){
+					String have=fromServer.readUTF();
+					if(have.equals("yes")){
+						System.out.println("开始接收");
 						//String word=fromServer.readUTF();
 						//String trans1=fromServer.readUTF();
 						//String trans2=fromServer.readUTF();
 						//String trans3=fromServer.readUTF();
+						//sendornot=1;
 						createDir(path);
 						String[] FileList = new File(path).list();
-						String tn=""+(FileList.length+1);
+						String tn=""+(FileList.length);
+						DataInputStream dis=new DataInputStream(socket.getInputStream());
 						fos=new FileOutputStream(new File(path+"//"+tn+".jpg"));
 						byte[] inputByte =new byte[1024];
+						//byte[] inputByte =new byte[64];
 						int length=0;
-						while((length=fromServer.read(inputByte,0,inputByte.length))>0){
+						while((length=dis.read(inputByte,0,inputByte.length))>1023){
+							System.out.println(length);
 							fos.write(inputByte, 0, length);
 							fos.flush();
 						}
+						System.out.println("接收完成");
+						//sendornot=0;
+						//CallOn.start();
 						//CreateImage(word,trans1,trans2,trans3,path);
 						//createDir("//User//wfsm//Desktop//"+user);
 						JOptionPane.showMessageDialog(SearchUI.this, "有新消息");
 					}
+					else
+						;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String t=otherUser.getSelectedItem().toString();
+				//String t=otherUser.getSelectedItem().toString();
 				//otherUser.addItem(count);
 				//System.out.println(t);
 			}
 		};
 		Timer CallOn=new Timer(delay,taskEvent);
-		CallOn.start();*/
+		//if(sendornot==0)
+		//{//Timer CallOn=new Timer(delay,taskEvent);
+		CallOn.start();
+		//sendornot=1;
+		//}
 		
 		input.getDocument().addDocumentListener(new DocumentListener(){
             @Override
@@ -276,31 +300,40 @@ public class SearchUI extends JFrame{
 		
 		send.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				String sendpath="//Users//wfsm//Desktop//1.jpg";
-				CreateImage(input.getText(),type1,type2,type3,sendpath);//修改过的地方
+				//sendornot=1;
+				String sendpath="//Users//wfsm//Desktop//Image";
+				sendpath=CreateImage(input.getText(),type1,type2,type3,sendpath);//修改过的地方
 				File f=new File(sendpath);
 				//fis=new FileInputStream(f);
 				
 				String sm="card";
 				try {
+					CallOn.stop();
+					sendornot=0;
 					fis=new FileInputStream(f);
 					byte[] sendBytes=null;
 					sendBytes=new byte[1024];
+					//sendBytes=new byte[64];
 					toServer.writeUTF(sm);
-					toServer.flush();
+					//toServer.flush();
 					//toServer.writeUTF(input.getText());
 					toServer.writeUTF(otherUser.getSelectedItem().toString());
-					toServer.flush();
+					//CallOn.stop();
+					//toServer.flush();
 					int length=0;
-					while((length=fis.read(sendBytes,0,sendBytes.length))>0){
+					while((length=fis.read(sendBytes,0,sendBytes.length))>10){
 						toServer.write(sendBytes, 0, length);
 						toServer.flush();
 					}
+					//toServer.writeUTF("abc");
 					//toServer.writeUTF(type1);
 					//toServer.writeUTF(type2);
 					//toServer.writeUTF(type3);
-					//toServer.flush();
+					toServer.flush();
 					//File f=new File()
+					System.out.println("发送成功");
+					//sendornot=0;
+					//CallOn.start();
 					JOptionPane.showMessageDialog(SearchUI.this, "发送成功!");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -411,6 +444,17 @@ public class SearchUI extends JFrame{
 		
 		quit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				try {
+					toServer.writeUTF("logout");
+					toServer.writeUTF(user);
+					toServer.flush();
+					String t=fromServer.readUTF();
+					if(t.equals("success"))
+						;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				JOptionPane.showMessageDialog(SearchUI.this, "退出成功!");  
 				owner.setVisible(true);
 				SearchUI.this.dispose();
@@ -434,7 +478,12 @@ public class SearchUI extends JFrame{
 		input.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try {
+					//if(sendornot==0)
+						//CallOn.start();
 					likeBD=likeYD=likeBY=0;
+					BD.setIcon(new ImageIcon("心1.png"));
+					YD.setIcon(new ImageIcon("心1.png"));
+					BY.setIcon(new ImageIcon("心1.png"));
 					String content = input.getText().trim();
 					SearchWord=content;
 					toServer.writeUTF(content);
@@ -495,14 +544,14 @@ public class SearchUI extends JFrame{
 					}
 					else if(order.equals("231")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
-						p5.add(p3);p5.add(p4);p5.add(p2);p5.add(p9);
+						/*p5.add(p3);p5.add(p4);p5.add(p2);*/p5.add(p4);p5.add(p2);p5.add(p3);p5.add(p9);
 						type2="百度："+BDText.getText();
 						type3="有道："+YDText.getText();
 						type1="必应："+BYText.getText();
 					}
 					else if(order.equals("312")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
-						p5.add(p4);p5.add(p2);p5.add(p3);p5.add(p9);
+						/*p5.add(p4);p5.add(p2);p5.add(p3);*/p5.add(p3);p5.add(p4);p5.add(p2);p5.add(p9);
 						type3="百度："+BDText.getText();
 						type1="有道："+YDText.getText();
 						type2="必应："+BYText.getText();
@@ -533,6 +582,9 @@ public class SearchUI extends JFrame{
 			public void actionPerformed(ActionEvent e){
 				try {
 					likeBD=likeYD=likeBY=0;
+					BD.setIcon(new ImageIcon("心1.png"));
+					YD.setIcon(new ImageIcon("心1.png"));
+					BY.setIcon(new ImageIcon("心1.png"));
 					String prefix="search";
 					String content = input.getText().trim();
 					SearchWord=content;
@@ -591,14 +643,14 @@ public class SearchUI extends JFrame{
 					}
 					else if(order.equals("231")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
-						p5.add(p3);p5.add(p4);p5.add(p2);p5.add(p9);
+						/*p5.add(p3);p5.add(p4);p5.add(p2);*/p5.add(p4);p5.add(p2);p5.add(p3);p5.add(p9);
 						type2="百度："+BDText.getText();
 						type3="有道："+YDText.getText();
 						type1="必应："+BYText.getText();
 					}
 					else if(order.equals("312")){
 						p5.remove(p2);p5.remove(p3);p5.remove(p4);p5.remove(p9);
-						p5.add(p4);p5.add(p2);p5.add(p3);p5.add(p9);
+						/*p5.add(p4);p5.add(p2);p5.add(p3);*/p5.add(p3);p5.add(p4);p5.add(p2);p5.add(p9);
 						type3="百度："+BDText.getText();
 						type1="有道："+YDText.getText();
 						type2="必应："+BYText.getText();
@@ -628,7 +680,7 @@ public class SearchUI extends JFrame{
 	}
 	
 	
-	public  void CreateImage(String word,String trans1,String trans2,String trans3,String filepath){
+	public  String CreateImage(String word,String trans1,String trans2,String trans3,String filepath){
 		//System.out.println("t");
 		int imageWidth=400;
 		int imageHeight=400;
@@ -709,14 +761,20 @@ public class SearchUI extends JFrame{
 		///g.setFont(new Font("宋体",Font.PLAIN,25));
 		//g.drawString("2", 0, 50);
 		//System.out.println("t");
+		 String p="";
 		try {
 			String[] FileList=new File(filepath).list();
-			String tn=""+(FileList.length+1);
+			//String tn=new String();
+			String tn=""+(FileList.length);
+			//String tn=""+(FileList.length+1);
 			ImageIO.write(bi, "jpg", new File(filepath+"//"+tn+".jpg"));
+			p = filepath+"//"+tn+".jpg";
+			//return p;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return p;
 	}
 	
 	public static boolean createDir(String destDirName) {

@@ -19,6 +19,7 @@ import javax.swing.*;
 public class UI extends JFrame {
 	DataOutputStream toServer;
 	DataInputStream fromServer;
+	Socket socket;
 	
 	JFrame w=new JFrame();
 	//JFrame w=new ImageJFrame();
@@ -29,6 +30,7 @@ public class UI extends JFrame {
 	JButton Register = new JButton("注册:");
 	
 	public UI() throws IOException{
+
 		//getContentFrame().add(w);
 		password.setEchoChar('*');
 		JPanel p1 = new JPanel();
@@ -64,7 +66,7 @@ public class UI extends JFrame {
 		
 		try {
 			//Socket socket = new Socket("localhost",9083);
-			Socket socket = new Socket("192.168.1.103",9083);
+			socket = new Socket("114.212.133.159",9083);
 			//Socket socket = new Socket("192.168.148.1",9083);
 			fromServer = new DataInputStream(socket.getInputStream());
 			toServer = new DataOutputStream(socket.getOutputStream());
@@ -115,7 +117,7 @@ public class UI extends JFrame {
 							w.setVisible(false);
 						//RegisterUI x= new RegisterUI(UI.this);
 							try {
-								new SearchUI(w,user.getText(),toServer,fromServer).setVisible(true);
+								new SearchUI(w,user.getText(),toServer,fromServer,socket).setVisible(true);
 							} catch (IOException e1) {
 							// TODO Auto-generated catch block
 								e1.printStackTrace();

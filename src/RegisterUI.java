@@ -61,7 +61,7 @@ public class RegisterUI extends JFrame{
 	
 		try {
 			//Socket socket = new Socket("localhost",9083);
-			Socket socket = new Socket("192.168.1.103",9083);
+			Socket socket = new Socket("114.212.133.159",9083);
 			//Socket socket = new Socket("192.168.148.1",9083);
 			fromServer = new DataInputStream(socket.getInputStream());
 			toServer = new DataOutputStream(socket.getOutputStream());
