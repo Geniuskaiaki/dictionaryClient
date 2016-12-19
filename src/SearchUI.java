@@ -154,6 +154,7 @@ public class SearchUI extends JFrame{
 			public void actionPerformed(ActionEvent aen){
 				//count++;
 				try {
+					//System.out.println("visit");
 					toServer.writeUTF("HaveMessage");
 					toServer.writeUTF(user);
 					toServer.flush();
@@ -308,7 +309,7 @@ public class SearchUI extends JFrame{
 				
 				String sm="card";
 				try {
-					CallOn.stop();
+					//CallOn.stop();
 					sendornot=0;
 					fis=new FileInputStream(f);
 					byte[] sendBytes=null;
@@ -332,6 +333,7 @@ public class SearchUI extends JFrame{
 					toServer.flush();
 					//File f=new File()
 					System.out.println("发送成功");
+					fis.close();
 					//sendornot=0;
 					//CallOn.start();
 					JOptionPane.showMessageDialog(SearchUI.this, "发送成功!");
@@ -459,7 +461,7 @@ public class SearchUI extends JFrame{
 				owner.setVisible(true);
 				SearchUI.this.dispose();
 				////////////////////
-				//CallOn.stop();
+				CallOn.stop();
 	           // System.exit(0); 
 			}
 		}
@@ -683,7 +685,7 @@ public class SearchUI extends JFrame{
 	public  String CreateImage(String word,String trans1,String trans2,String trans3,String filepath){
 		//System.out.println("t");
 		int imageWidth=400;
-		int imageHeight=400;
+		int imageHeight=300;
 		BufferedImage bi=new BufferedImage(400,400,BufferedImage.TYPE_INT_RGB);
 		Graphics graphics=bi.getGraphics();
 		//aphics graphics = image.getGraphics();
