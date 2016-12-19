@@ -188,11 +188,16 @@ public class SearchUI extends JFrame{
 						byte[] inputByte =new byte[1024];
 						//byte[] inputByte =new byte[64];
 						int length=0;
-						while((length=dis.read(inputByte,0,inputByte.length))>1023){
+						length=dis.read(inputByte,0,inputByte.length);
+						while(length>1023){
 							System.out.println(length);
 							fos.write(inputByte, 0, length);
 							fos.flush();
+							length=dis.read(inputByte,0,inputByte.length);
 						}
+						System.out.println(length);
+						fos.write(inputByte, 0, length);
+						fos.flush();
 						System.out.println("接收完成");
 						//sendornot=0;
 						//CallOn.start();
@@ -322,10 +327,14 @@ public class SearchUI extends JFrame{
 					//CallOn.stop();
 					//toServer.flush();
 					int length=0;
-					while((length=fis.read(sendBytes,0,sendBytes.length))>10){
+					length=fis.read(sendBytes,0,sendBytes.length);
+					while(length>1023){
 						toServer.write(sendBytes, 0, length);
 						toServer.flush();
+						length=fis.read(sendBytes,0,sendBytes.length);
 					}
+					toServer.write(sendBytes, 0, length);
+					toServer.flush();
 					//toServer.writeUTF("abc");
 					//toServer.writeUTF(type1);
 					//toServer.writeUTF(type2);
@@ -685,7 +694,7 @@ public class SearchUI extends JFrame{
 	public  String CreateImage(String word,String trans1,String trans2,String trans3,String filepath){
 		//System.out.println("t");
 		int imageWidth=400;
-		int imageHeight=300;
+		int imageHeight=400;
 		BufferedImage bi=new BufferedImage(400,400,BufferedImage.TYPE_INT_RGB);
 		Graphics graphics=bi.getGraphics();
 		//aphics graphics = image.getGraphics();
